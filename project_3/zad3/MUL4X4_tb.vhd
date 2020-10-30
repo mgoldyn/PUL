@@ -37,6 +37,10 @@ begin
         b <= ("1111");
         wait for 10 ns;
         
+        a <= ("0010");
+        b <= ("1100");
+        wait for 10 ns;
+        wait;
     end process;
 
 end tb;

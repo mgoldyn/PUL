@@ -27,19 +27,18 @@ signal cin: STD_LOGIC_VECTOR(4 downto 0);
 signal y_temp: STD_LOGIC_VECTOR(7 downto 0);
 
 begin
--- Input wpisany z offsetem do sygnalu
+-- Wektory wejsciowe zamienione w 8bitowe z offsetem
 F: for i in 0 to 3 generate
     G: for j in 0 to 3 generate
         and_out(i)(i + j) <= a(i) and b(j);
     end generate;
 end generate;
 
--- Sumator 8 bitowy na 2 parach wynikach operacji and
 H: for k in 0 to 1 generate
     sum: SUMNB port map(Cin => cin(k), Cout => cin(k + 1), A => and_out(k * 2), B => and_out((k * 2) + 1), Y => sum_out(k));
+    if0: if k > 0 generate
+        sum: SUMNB port map(Cin => cin(k + 1), Cout => cin(0), A => sum_out(k - 1), B => sum_out(k), Y => y);
+    end generate;
 end generate;
-
--- Sumator 8 bitowy na parze wynikow z kroku poprzedniego
-sum: SUMNB port map(Cin => cin(4), Cout => cin(0), A => sum_out(0), B => sum_out(1), Y => y);
 
 end Behavioral;
